@@ -1,5 +1,6 @@
 package com.grupo1.alojapp.Services;
 
+import com.grupo1.alojapp.DTOs.LoginDTO;
 import com.grupo1.alojapp.DTOs.UserDTO;
 import com.grupo1.alojapp.Model.Rol;
 import com.grupo1.alojapp.Model.Usuario;
@@ -67,7 +68,21 @@ public class UsuarioService {
         Usuario filter = new Usuario();
         filter.setEmail(username);
         Specification<Usuario> spec = new UsuarioSpecification(filter);
-        return usuarioRepository.findOne(spec).get();
+        try{
+            return usuarioRepository.findOne(spec).get();
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+
+    public boolean loginUsuarioCorrecto(LoginDTO loginDTO){
+        Usuario usuario =  getUsuarioByUsername(loginDTO.getUsername());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if(usuario != null){
+            return passwordEncoder.matches(loginDTO.getPassword(), usuario.getPassword());
+        }
+        return false;
     }
 
 }

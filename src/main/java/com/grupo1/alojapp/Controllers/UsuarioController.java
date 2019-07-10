@@ -1,5 +1,6 @@
 package com.grupo1.alojapp.Controllers;
 
+import com.grupo1.alojapp.DTOs.LoginDTO;
 import com.grupo1.alojapp.DTOs.UserDTO;
 import com.grupo1.alojapp.Services.UsuarioService;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +22,13 @@ public class UsuarioController {
     public ResponseEntity<UserDTO> registrarUsuario(@RequestBody UserDTO userDTO){
         usuarioService.registrarUsuarioFromDTO(userDTO);
         return ResponseEntity.ok(userDTO);
+    }
+
+    @PostMapping("usuario/login")
+    @ResponseBody
+    public boolean loginUsuarioCorrecto(@RequestBody LoginDTO loginDTO){
+        boolean response = usuarioService.loginUsuarioCorrecto(loginDTO);
+        return response;
     }
 
 }
