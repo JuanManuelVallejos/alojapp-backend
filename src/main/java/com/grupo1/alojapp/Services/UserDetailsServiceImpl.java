@@ -11,19 +11,18 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private UsuarioService usuarioService;
 
     @Autowired
     public UserDetailsServiceImpl() {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userService.GetUser(s);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = usuarioService.GetUser(username);
         if (user == null){
-            throw new UsernameNotFoundException("User with " + s + " not found!");
+            throw new UsernameNotFoundException("User with " + username + " not found!");
         }
-
         return user;
     }
 }

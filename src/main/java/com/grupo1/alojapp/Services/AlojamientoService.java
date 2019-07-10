@@ -2,8 +2,10 @@ package com.grupo1.alojapp.Services;
 
 import com.grupo1.alojapp.Assemblies.AlojamientoAssembly;
 import com.grupo1.alojapp.DTOs.AlojamientoDTO;
+import com.grupo1.alojapp.DTOs.UserDTO;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
 import com.grupo1.alojapp.Model.Alojamiento;
+import com.grupo1.alojapp.Model.Usuario;
 import com.grupo1.alojapp.Repositories.AlojamientoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
