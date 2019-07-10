@@ -2,13 +2,10 @@ package com.grupo1.alojapp.Controllers;
 
 import com.grupo1.alojapp.DTOs.AlojamientoDTO;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
-import com.grupo1.alojapp.MainApplication;
 import com.grupo1.alojapp.Services.AlojamientoService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,7 +13,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT })
 public class AlojamientoController {
 
-    private static final Logger LOGGER = LogManager.getLogger(AlojamientoController.class);
+    static Logger log = Logger.getLogger(AlojamientoController.class.getName());
 
     @Autowired
     private AlojamientoService alojamientoService;
@@ -24,7 +21,7 @@ public class AlojamientoController {
     @GetMapping("alojamiento/get")
     @ResponseBody
     public ResponseEntity<List<AlojamientoDTO>> getAlojamientosVigentes(){
-        LOGGER.info("Se piden todos los alojamientos");
+        log.debug("Se piden todos los alojamientos");
         List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllVigentes();
         return ResponseEntity.ok(alojamientosDTO);
     }
