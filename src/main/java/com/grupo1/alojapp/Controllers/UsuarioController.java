@@ -26,9 +26,12 @@ public class UsuarioController {
 
     @PostMapping("usuario/login")
     @ResponseBody
-    public boolean loginUsuarioCorrecto(@RequestBody LoginDTO loginDTO){
-        boolean response = usuarioService.loginUsuarioCorrecto(loginDTO);
-        return response;
+    public ResponseEntity<UserDTO> loginUsuarioCorrecto(@RequestBody LoginDTO loginDTO){
+        UserDTO userDTO = usuarioService.loginUsuarioCorrecto(loginDTO);
+        if(userDTO == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userDTO);
     }
 
 }

@@ -1,11 +1,13 @@
 package com.grupo1.alojapp.Services;
 
+import com.grupo1.alojapp.Assemblies.UsuarioAssembly;
 import com.grupo1.alojapp.DTOs.LoginDTO;
 import com.grupo1.alojapp.DTOs.UserDTO;
 import com.grupo1.alojapp.Model.Rol;
 import com.grupo1.alojapp.Model.Usuario;
 import com.grupo1.alojapp.Repositories.UsuarioRepository;
 import com.grupo1.alojapp.Specifications.UsuarioSpecification;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +20,9 @@ import java.util.*;
 
 @Service
 public class UsuarioService {
+
+    static Logger log = Logger.getLogger(UsuarioService.class.getName());
+    private UsuarioAssembly usuarioAssembly = new UsuarioAssembly();
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -72,17 +77,19 @@ public class UsuarioService {
             return usuarioRepository.findOne(spec).get();
         }
         catch(Exception e){
+            log.error("Al intentar obtener el usuario" + username+" se lanzo exception: \\n"+
+                    e.getMessage()+ e.getStackTrace());
             return null;
         }
     }
 
-    public boolean loginUsuarioCorrecto(LoginDTO loginDTO){
+    public UserDTO loginUsuarioCorrecto(LoginDTO loginDTO){
         Usuario usuario =  getUsuarioByUsername(loginDTO.getUsername());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if(usuario != null){
-            return passwordEncoder.matches(loginDTO.getPassword(), usuario.getPassword());
+        if(usuario != null && passwordEncoder.matches(loginDTO.getPassword(), usuario.getPassword())){
+            return usuarioAssembly.map(usuario, UserDTO.class);
         }
-        return false;
+        return null;
     }
 
 }
