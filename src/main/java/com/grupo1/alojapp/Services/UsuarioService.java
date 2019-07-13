@@ -7,6 +7,7 @@ import com.grupo1.alojapp.Model.Rol;
 import com.grupo1.alojapp.Model.Usuario;
 import com.grupo1.alojapp.Repositories.UsuarioRepository;
 import com.grupo1.alojapp.Specifications.UsuarioSpecification;
+import javafx.util.Pair;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -83,13 +84,14 @@ public class UsuarioService {
         }
     }
 
-    public UserDTO loginUsuarioCorrecto(LoginDTO loginDTO){
+    public Pair<UserDTO,Boolean> loginUsuarioCorrecto(LoginDTO loginDTO){
         Usuario usuario =  getUsuarioByUsername(loginDTO.getUsername());
+        if(usuario == null) return null;
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if(usuario != null && passwordEncoder.matches(loginDTO.getPassword(), usuario.getPassword())){
-            return usuarioAssembly.map(usuario, UserDTO.class);
-        }
-        return null;
+        Boolean correctPass = passwordEncoder.matches(loginDTO.getPassword(), usuario.getPassword());
+        UserDTO userDTO = usuarioAssembly.map(usuario, UserDTO.class);
+        Pair<UserDTO, Boolean> response = new Pair<>(userDTO,correctPass);
+        return response;
     }
 
 }

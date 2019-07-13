@@ -3,6 +3,7 @@ package com.grupo1.alojapp.Controllers;
 import com.grupo1.alojapp.DTOs.LoginDTO;
 import com.grupo1.alojapp.DTOs.UserDTO;
 import com.grupo1.alojapp.Services.UsuarioService;
+import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,16 @@ public class UsuarioController {
     @PostMapping("usuario/login")
     @ResponseBody
     public ResponseEntity<UserDTO> loginUsuarioCorrecto(@RequestBody LoginDTO loginDTO){
-        UserDTO userDTO = usuarioService.loginUsuarioCorrecto(loginDTO);
-        if(userDTO == null){
+        Pair<UserDTO,Boolean> response = usuarioService.loginUsuarioCorrecto(loginDTO);
+        if(response == null){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(userDTO);
+        if(response.getValue()){
+            return ResponseEntity.ok(response.getKey());
+        }
+        else{
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
