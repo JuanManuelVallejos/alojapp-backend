@@ -8,7 +8,6 @@ public class UsuarioAssembly extends ModelMapper {
 
     public UserDTO map(Usuario usuario, Class<UserDTO> destinationType){
         UserDTO usuarioDTO = super.map(usuario,destinationType);
-        usuarioDTO.setRoles(null);
         return  usuarioDTO;
     }
 

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "role_app")
-public class Rol {
+public class Rol extends Object{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +17,11 @@ public class Rol {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString(){
+        return  getName();
     }
 
 }
