@@ -2,6 +2,7 @@ package com.grupo1.alojapp.DTOs;
 
 import com.grupo1.alojapp.Model.TIPOALOJAMIENTO;
 
+import javax.validation.constraints.Null;
 import java.util.Collection;
 
 public class AlojamientoDTO {
@@ -11,7 +12,9 @@ public class AlojamientoDTO {
     private String descripcion;
     private TIPOALOJAMIENTO tipoalojamiento;
     private Float categoria;
-    private boolean checked;
+    @Null
+    private Boolean checked;
+    private String justificacionRechazo;
     private UbicacionDTO ubicacion;
     private Collection<CloudFileDTO> referenceFiles;
 
@@ -71,11 +74,19 @@ public class AlojamientoDTO {
         this.referenceFiles = referenceFiles;
     }
 
-    public boolean isChecked() {
+    public String getJustificacionRechazo() {
+        return justificacionRechazo;
+    }
+
+    public void setJustificacionRechazo(String justificacionRechazo) {
+        this.justificacionRechazo = justificacionRechazo;
+    }
+
+    public Boolean getChecked() {
         return checked;
     }
 
-    public void setChecked(boolean checked) {
+    public void setChecked(Boolean checked) {
         this.checked = checked;
     }
 }

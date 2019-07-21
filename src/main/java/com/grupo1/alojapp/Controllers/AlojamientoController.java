@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -65,15 +66,15 @@ public class AlojamientoController {
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PutMapping("/alojamiento/check/{id}")
+    @PostMapping("/alojamiento/check/{id}")
     public ResponseEntity<AlojamientoDTO> check(@PathVariable Long id){
         AlojamientoDTO alojamientoDTO = alojamientoService.checkAlojamiento(id);
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PutMapping("/alojamiento/uncheck/{id}")
-    public ResponseEntity<AlojamientoDTO> uncheck(@PathVariable Long id){
-        AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id);
+    @PostMapping("/alojamiento/uncheck/{id}")
+    public ResponseEntity<AlojamientoDTO> uncheck(@PathVariable Long id,@NotNull @RequestParam("justificacion") String justificacionRechazo){
+        AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id, justificacionRechazo);
         return ResponseEntity.ok(alojamientoDTO);
     }
 

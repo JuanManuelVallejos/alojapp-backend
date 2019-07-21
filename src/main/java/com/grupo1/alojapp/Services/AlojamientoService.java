@@ -102,9 +102,10 @@ public class AlojamientoService {
         return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
     }
 
-    public AlojamientoDTO uncheckAlojamiento(long idAlojamiento){
+    public AlojamientoDTO uncheckAlojamiento(long idAlojamiento, String motivoRechazo){
         Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
         alojamiento.setChecked(false);
+        alojamiento.setJustificacionRechazo(motivoRechazo);
         return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
     }
 

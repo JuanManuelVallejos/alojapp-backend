@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,8 +36,9 @@ public class Alojamiento implements Serializable {
 
     @NotNull
     private boolean eliminado;
-    @NotNull
-    private boolean checked;
+    @Null
+    private Boolean checked;
+    private String justificacionRechazo;
 
     public Alojamiento(){
         eliminado = false;
@@ -113,11 +115,19 @@ public class Alojamiento implements Serializable {
         referenceFiles.add(cloudFile);
     }
 
-    public boolean isChecked() {
+    public String getJustificacionRechazo() {
+        return justificacionRechazo;
+    }
+
+    public void setJustificacionRechazo(String justificacionRechazo) {
+        this.justificacionRechazo = justificacionRechazo;
+    }
+
+    public Boolean getChecked() {
         return checked;
     }
 
-    public void setChecked(boolean checked) {
+    public void setChecked(Boolean checked) {
         this.checked = checked;
     }
 }
