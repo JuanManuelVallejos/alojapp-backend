@@ -62,6 +62,30 @@ public class AlojamientoService {
         return convertAlojamientoListToDTO(alojamientos);
     }
 
+    public List<AlojamientoDTO> getAllPorValidar(){
+        List<AlojamientoDTO> alojamientosDTO =
+         getAllVigentes().stream().filter(alojamiento -> alojamiento.getChecked() == null).collect(Collectors.toList());
+        return alojamientosDTO;
+    }
+
+    public List<AlojamientoDTO> getAllValidados(){
+        List<AlojamientoDTO> alojamientosDTO =
+                getAllVigentes().stream().filter(alojamiento ->
+                    alojamiento.getChecked() != null
+                    && alojamiento.getChecked()
+                ).collect(Collectors.toList());
+        return alojamientosDTO;
+    }
+
+    public List<AlojamientoDTO> getAllRechazados(){
+        List<AlojamientoDTO> alojamientosDTO =
+                getAllVigentes().stream().filter(alojamiento ->
+                        alojamiento.getChecked() != null
+                                && !alojamiento.getChecked()
+                ).collect(Collectors.toList());
+        return alojamientosDTO;
+    }
+
     private List<AlojamientoDTO> convertAlojamientoListToDTO(List<Alojamiento> alojamientos){
         List<AlojamientoDTO> alojamientosDTO = new ArrayList<AlojamientoDTO>();
         alojamientos.forEach(alojamiento -> alojamientosDTO.add(alojamientoAssembly.map(alojamiento, AlojamientoDTO.class)));

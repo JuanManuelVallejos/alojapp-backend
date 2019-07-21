@@ -40,6 +40,30 @@ public class AlojamientoController {
         return ResponseEntity.ok(alojamientosDTO);
     }
 
+    @GetMapping("alojamiento/getPorValidar")
+    @ResponseBody
+    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosPorValidar(){
+        log.debug("Se piden todos los alojamientos");
+        List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllPorValidar();
+        return ResponseEntity.ok(alojamientosDTO);
+    }
+
+    @GetMapping("alojamiento/getValidados")
+    @ResponseBody
+    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosValidados(){
+        log.debug("Se piden los alojamientos validados");
+        List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllValidados();
+        return ResponseEntity.ok(alojamientosDTO);
+    }
+
+    @GetMapping("alojamiento/getRechazados")
+    @ResponseBody
+    public ResponseEntity<List<AlojamientoDTO>> getAllRechazados(){
+        log.debug("Se piden los alojamientos rechazados");
+        List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllRechazados();
+        return ResponseEntity.ok(alojamientosDTO);
+    }
+
     @GetMapping("alojamiento/get/{id}")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> getAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException {
