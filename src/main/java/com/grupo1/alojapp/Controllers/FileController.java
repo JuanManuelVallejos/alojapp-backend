@@ -23,7 +23,6 @@ public class FileController {
 
     static Logger logger = Logger.getLogger(AlojamientoController.class.getName());
 
-    @Autowired
     private FileStorageService fileStorageService;
 
     @PostMapping("/uploadFile")
