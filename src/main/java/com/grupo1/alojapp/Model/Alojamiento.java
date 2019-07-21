@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Table(name = "Alojamiento")
@@ -22,6 +24,15 @@ public class Alojamiento implements Serializable {
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private Ubicacion ubicacion;
+
+    @JoinTable(
+            name = "alojamiento_files",
+            joinColumns = @JoinColumn(name = "alojamiento_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name="file_id", nullable = false)
+    )
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Collection<CloudFile> referenceFiles;
+
     @NotNull
     private boolean eliminado;
 
@@ -87,5 +98,16 @@ public class Alojamiento implements Serializable {
 
     public void setEliminado(boolean eliminado) {
         this.eliminado = eliminado;
+    }
+
+    public Collection<CloudFile> getReferenceFiles() {
+        if(referenceFiles == null)
+            referenceFiles = new ArrayList<>();
+        return referenceFiles;
+    }
+
+    public void addReferenceFile(CloudFile cloudFile){
+        referenceFiles = getReferenceFiles();
+        referenceFiles.add(cloudFile);
     }
 }

@@ -9,10 +9,12 @@ import org.modelmapper.ModelMapper;
 public class AlojamientoAssembly extends ModelMapper {
 
     private UbicacionAssembly ubicacionAssembly = new UbicacionAssembly();
+    private CloudFileAssembly cloudFileAssembly = new CloudFileAssembly();
 
     public AlojamientoDTO map(Alojamiento alojamiento, Class<AlojamientoDTO> destinationType){
         AlojamientoDTO alojamientoDTO = super.map(alojamiento,destinationType);
         alojamientoDTO.setUbicacion(ubicacionAssembly.map(alojamiento.getUbicacion(), UbicacionDTO.class));
+        alojamientoDTO.setReferenceFiles(cloudFileAssembly.map(alojamiento.getReferenceFiles()));
         return  alojamientoDTO;
     }
 

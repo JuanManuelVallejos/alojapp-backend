@@ -1,12 +1,16 @@
 package com.grupo1.alojapp.Controllers;
 
 import com.grupo1.alojapp.DTOs.AlojamientoDTO;
+import com.grupo1.alojapp.DTOs.CloudFileDTO;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
+import com.grupo1.alojapp.Model.CloudFile;
 import com.grupo1.alojapp.Services.AlojamientoService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -17,6 +21,8 @@ public class AlojamientoController {
 
     @Autowired
     private AlojamientoService alojamientoService;
+    @Autowired
+    private CloudFileController cloudFileController;
 
     @GetMapping("alojamiento/get")
     @ResponseBody
@@ -50,6 +56,13 @@ public class AlojamientoController {
     @ResponseBody
     public void deleteAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException{
         alojamientoService.deleteAlojamientoById(id);
+    }
+
+    @PostMapping("/alojamiento/uploadFile/{id}")
+    public ResponseEntity<AlojamientoDTO> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws Exception{
+        CloudFile cloudFile = cloudFileController.uploadFile(file);
+        AlojamientoDTO alojamientoDTO = alojamientoService.addCloudFileToAlojamiento(cloudFile,id);
+        return ResponseEntity.ok(alojamientoDTO);
     }
 
 }

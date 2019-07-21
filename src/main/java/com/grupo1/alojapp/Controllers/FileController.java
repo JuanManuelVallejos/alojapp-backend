@@ -1,6 +1,6 @@
 package com.grupo1.alojapp.Controllers;
 
-import com.grupo1.alojapp.DTOs.UploadFileResponse;
+import com.grupo1.alojapp.DTOs.CloudFileDTO;
 import com.grupo1.alojapp.Services.FileStorageService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class FileController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    public CloudFileDTO uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -35,12 +35,12 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        return new UploadFileResponse(fileName, fileDownloadUri,
+        return new CloudFileDTO(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
     }
 
     @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+    public List<CloudFileDTO> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))

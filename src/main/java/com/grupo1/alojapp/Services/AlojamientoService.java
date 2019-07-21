@@ -1,11 +1,11 @@
 package com.grupo1.alojapp.Services;
 
 import com.grupo1.alojapp.Assemblies.AlojamientoAssembly;
+import com.grupo1.alojapp.Assemblies.CloudFileAssembly;
 import com.grupo1.alojapp.DTOs.AlojamientoDTO;
-import com.grupo1.alojapp.DTOs.UserDTO;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
 import com.grupo1.alojapp.Model.Alojamiento;
-import com.grupo1.alojapp.Model.Usuario;
+import com.grupo1.alojapp.Model.CloudFile;
 import com.grupo1.alojapp.Repositories.AlojamientoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ public class AlojamientoService {
 
     @Autowired
     private AlojamientoRepository alojamientoRepository;
-
     private AlojamientoAssembly alojamientoAssembly = new AlojamientoAssembly();
+
 
     private AlojamientoDTO getAlojamientoVigenteById(Long id) throws AlojamientoEliminadoException{
         Alojamiento alojamiento = alojamientoRepository.getOne(id);
@@ -58,6 +58,42 @@ public class AlojamientoService {
         List<AlojamientoDTO> alojamientosDTO = new ArrayList<AlojamientoDTO>();
         alojamientos.forEach(alojamiento -> alojamientosDTO.add(alojamientoAssembly.map(alojamiento, AlojamientoDTO.class)));
         return alojamientosDTO;
+    }
+
+    public AlojamientoDTO addCloudFileToAlojamiento(CloudFile cloudFile, long idAlojamiento){
+        Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
+        alojamiento.addReferenceFile(cloudFile);
+        alojamientoRepository.save(alojamiento);
+        return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
+    }
+
+    //TODO: Refactor
+    private List<Alojamiento> getAlojamientosConFile(long idFile){
+        List<Alojamiento> alojamientos = alojamientoRepository.findAll();
+        List<Alojamiento> alojamientosConFile = new ArrayList<>();
+        alojamientos.forEach(
+                alo ->{
+                    alo.getReferenceFiles().forEach(
+                            rf -> {
+                                if(rf.getId() == idFile){
+                                    alojamientosConFile.add(alo);
+                                }
+                            }
+                    );
+                }
+        );
+        return alojamientosConFile;
+    }
+
+    //TODO: Refactor
+    public void deleteFileFromAlojamiento(CloudFile cloudFile){
+        List<Alojamiento> alojamientos = getAlojamientosConFile(cloudFile.getId());
+        alojamientos.forEach(
+                alo ->{
+                    alo.getReferenceFiles().remove(cloudFile);
+                    alojamientoRepository.save(alo);
+                }
+        );
     }
 
 }

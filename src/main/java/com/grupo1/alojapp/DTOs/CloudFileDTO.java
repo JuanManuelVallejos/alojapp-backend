@@ -1,12 +1,15 @@
 package com.grupo1.alojapp.DTOs;
 
-public class UploadFileResponse {
+public class CloudFileDTO {
+    private long id;
     private String fileName;
     private String fileDownloadUri;
     private String fileType;
     private long size;
 
-    public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, long size) {
+    public CloudFileDTO(){}
+
+    public CloudFileDTO(String fileName, String fileDownloadUri, String fileType, long size) {
         this.fileName = fileName;
         this.fileDownloadUri = fileDownloadUri;
         this.fileType = fileType;
@@ -43,5 +46,13 @@ public class UploadFileResponse {
 
     public void setSize(long size) {
         this.size = size;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

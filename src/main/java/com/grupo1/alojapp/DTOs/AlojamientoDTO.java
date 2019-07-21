@@ -2,6 +2,8 @@ package com.grupo1.alojapp.DTOs;
 
 import com.grupo1.alojapp.Model.TIPOALOJAMIENTO;
 
+import java.util.Collection;
+
 public class AlojamientoDTO {
 
     private Long id;
@@ -10,6 +12,7 @@ public class AlojamientoDTO {
     private TIPOALOJAMIENTO tipoalojamiento;
     private Float categoria;
     private UbicacionDTO ubicacion;
+    private Collection<CloudFileDTO> referenceFiles;
 
     public Long getId() {
         return id;
@@ -57,5 +60,13 @@ public class AlojamientoDTO {
 
     public void setUbicacion(UbicacionDTO ubicacion) {
         this.ubicacion = ubicacion;
+    }
+
+    public Collection<CloudFileDTO> getReferenceFiles() {
+        return referenceFiles;
+    }
+
+    public void setReferenceFiles(Collection<CloudFileDTO> referenceFiles) {
+        this.referenceFiles = referenceFiles;
     }
 }
