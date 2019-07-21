@@ -3,14 +3,19 @@ package com.grupo1.alojapp.Services;
 import com.grupo1.alojapp.Assemblies.AlojamientoAssembly;
 import com.grupo1.alojapp.Assemblies.CloudFileAssembly;
 import com.grupo1.alojapp.DTOs.AlojamientoDTO;
+import com.grupo1.alojapp.DTOs.DeletePensionDTO;
+import com.grupo1.alojapp.DTOs.PensionDTO;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
 import com.grupo1.alojapp.Model.Alojamiento;
 import com.grupo1.alojapp.Model.CloudFile;
+import com.grupo1.alojapp.Model.Pension;
+import com.grupo1.alojapp.Model.TIPOPENSION;
 import com.grupo1.alojapp.Repositories.AlojamientoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +24,9 @@ public class AlojamientoService {
 
     @Autowired
     private AlojamientoRepository alojamientoRepository;
+    @Autowired
+    private PensionService pensionService;
+
     private AlojamientoAssembly alojamientoAssembly = new AlojamientoAssembly();
 
 
@@ -107,6 +115,21 @@ public class AlojamientoService {
         alojamiento.setChecked(false);
         alojamiento.setJustificacionRechazo(motivoRechazo);
         return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
+    }
+
+    public AlojamientoDTO agregarPension(long idAlojamiento, Pension pension){
+        Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
+        alojamiento.addPension(pension);
+        alojamientoRepository.save(alojamiento);
+        return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
+    }
+
+    public AlojamientoDTO eliminarPension(DeletePensionDTO pensionDTO){
+        Alojamiento alojamiento = alojamientoRepository.getOne(pensionDTO.getIdAlojamiento());
+        Pension pension = pensionService.getPension(pensionDTO.getIdPension());
+        alojamiento.getPensiones().remove(pension);
+        alojamientoRepository.save(alojamiento);
+        return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
     }
 
 }

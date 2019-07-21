@@ -2,9 +2,14 @@ package com.grupo1.alojapp.Controllers;
 
 import com.grupo1.alojapp.DTOs.AlojamientoDTO;
 import com.grupo1.alojapp.DTOs.CloudFileDTO;
+import com.grupo1.alojapp.DTOs.DeletePensionDTO;
+import com.grupo1.alojapp.DTOs.PensionDTO;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
 import com.grupo1.alojapp.Model.CloudFile;
+import com.grupo1.alojapp.Model.Pension;
+import com.grupo1.alojapp.Model.TIPOPENSION;
 import com.grupo1.alojapp.Services.AlojamientoService;
+import com.grupo1.alojapp.Services.PensionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +27,8 @@ public class AlojamientoController {
 
     @Autowired
     private AlojamientoService alojamientoService;
+    @Autowired
+    private PensionService pensionService;
     @Autowired
     private CloudFileController cloudFileController;
 
@@ -75,6 +82,20 @@ public class AlojamientoController {
     @PostMapping("/alojamiento/uncheck/{id}")
     public ResponseEntity<AlojamientoDTO> uncheck(@PathVariable Long id,@NotNull @RequestParam("justificacion") String justificacionRechazo){
         AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id, justificacionRechazo);
+        return ResponseEntity.ok(alojamientoDTO);
+    }
+
+    @PostMapping("/alojamiento/agregarModificarPension/{id}")
+    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@PathVariable Long id, @RequestBody PensionDTO pensionDTO){
+        Pension pension = pensionService.createPension(pensionDTO);
+        AlojamientoDTO alojamientoDTO = alojamientoService.agregarPension(id, pension);
+        return ResponseEntity.ok(alojamientoDTO);
+    }
+
+    @PostMapping("/alojamiento/deletePension")
+    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@RequestBody DeletePensionDTO pensionDTO){
+        AlojamientoDTO alojamientoDTO = alojamientoService.eliminarPension(pensionDTO);
+        pensionService.deletePension(pensionDTO);
         return ResponseEntity.ok(alojamientoDTO);
     }
 

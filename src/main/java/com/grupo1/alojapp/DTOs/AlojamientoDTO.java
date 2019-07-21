@@ -17,6 +17,7 @@ public class AlojamientoDTO {
     private String justificacionRechazo;
     private UbicacionDTO ubicacion;
     private Collection<CloudFileDTO> referenceFiles;
+    private Collection<PensionDTO> pensiones;
 
     public Long getId() {
         return id;
@@ -88,5 +89,13 @@ public class AlojamientoDTO {
 
     public void setChecked(Boolean checked) {
         this.checked = checked;
+    }
+
+    public Collection<PensionDTO> getPensiones() {
+        return pensiones;
+    }
+
+    public void setPensiones(Collection<PensionDTO> pensiones) {
+        this.pensiones = pensiones;
     }
 }

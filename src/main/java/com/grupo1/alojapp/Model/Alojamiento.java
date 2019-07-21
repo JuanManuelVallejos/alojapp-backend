@@ -34,6 +34,14 @@ public class Alojamiento implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL)
     private Collection<CloudFile> referenceFiles;
 
+    @JoinTable(
+            name = "alojamiento_pension",
+            joinColumns = @JoinColumn(name = "alojamiento_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name="pension_id", nullable = false)
+    )
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Collection<Pension> pensiones;
+
     @NotNull
     private boolean eliminado;
     @Null
@@ -113,6 +121,17 @@ public class Alojamiento implements Serializable {
     public void addReferenceFile(CloudFile cloudFile){
         referenceFiles = getReferenceFiles();
         referenceFiles.add(cloudFile);
+    }
+
+    public Collection<Pension> getPensiones() {
+        if(pensiones == null)
+            pensiones = new ArrayList<>();
+        return pensiones;
+    }
+
+    public void addPension(Pension pension){
+        pensiones = getPensiones();
+        pensiones.add(pension);
     }
 
     public String getJustificacionRechazo() {
