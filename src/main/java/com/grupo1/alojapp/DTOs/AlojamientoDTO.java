@@ -11,6 +11,7 @@ public class AlojamientoDTO {
     private String descripcion;
     private TIPOALOJAMIENTO tipoalojamiento;
     private Float categoria;
+    private boolean checked;
     private UbicacionDTO ubicacion;
     private Collection<CloudFileDTO> referenceFiles;
 
@@ -68,5 +69,13 @@ public class AlojamientoDTO {
 
     public void setReferenceFiles(Collection<CloudFileDTO> referenceFiles) {
         this.referenceFiles = referenceFiles;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

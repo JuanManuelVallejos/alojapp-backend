@@ -49,6 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/usuario/register").permitAll()
             .antMatchers("/usuario/login").permitAll()
             .antMatchers("/alojamiento/delete/**").hasRole("ADMIN")
+            .antMatchers("/alojamiento/check/**").hasRole("ADMIN")
+            .antMatchers("/alojamiento/uncheck/**").hasRole("ADMIN")
             .antMatchers("/alojamiento/**").hasAnyRole("USER","ADMIN")
             .antMatchers("/usuario/**").hasAnyRole("USER","ADMIN")
             .and().httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())

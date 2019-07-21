@@ -65,4 +65,16 @@ public class AlojamientoController {
         return ResponseEntity.ok(alojamientoDTO);
     }
 
+    @PutMapping("/alojamiento/check/{id}")
+    public ResponseEntity<AlojamientoDTO> check(@PathVariable Long id){
+        AlojamientoDTO alojamientoDTO = alojamientoService.checkAlojamiento(id);
+        return ResponseEntity.ok(alojamientoDTO);
+    }
+
+    @PutMapping("/alojamiento/uncheck/{id}")
+    public ResponseEntity<AlojamientoDTO> uncheck(@PathVariable Long id){
+        AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id);
+        return ResponseEntity.ok(alojamientoDTO);
+    }
+
 }

@@ -96,4 +96,16 @@ public class AlojamientoService {
         );
     }
 
+    public AlojamientoDTO checkAlojamiento(long idAlojamiento){
+        Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
+        alojamiento.setChecked(true);
+        return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
+    }
+
+    public AlojamientoDTO uncheckAlojamiento(long idAlojamiento){
+        Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
+        alojamiento.setChecked(false);
+        return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
+    }
+
 }

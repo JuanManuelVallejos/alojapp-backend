@@ -35,6 +35,8 @@ public class Alojamiento implements Serializable {
 
     @NotNull
     private boolean eliminado;
+    @NotNull
+    private boolean checked;
 
     public Alojamiento(){
         eliminado = false;
@@ -109,5 +111,13 @@ public class Alojamiento implements Serializable {
     public void addReferenceFile(CloudFile cloudFile){
         referenceFiles = getReferenceFiles();
         referenceFiles.add(cloudFile);
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
