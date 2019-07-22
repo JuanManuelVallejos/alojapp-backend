@@ -130,14 +130,16 @@ public class AlojamientoService {
 
     public AlojamientoDTO checkAlojamiento(long idAlojamiento){
         Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
-        alojamiento.setChecked(true);
+        Boolean checked = new Boolean(true);
+        alojamiento.setChecked(checked);
         alojamientoRepository.save(alojamiento);
         return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
     }
 
     public AlojamientoDTO uncheckAlojamiento(long idAlojamiento, String motivoRechazo){
         Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
-        alojamiento.setChecked(false);
+        Boolean checked = new Boolean(false);
+        alojamiento.setChecked(checked);
         alojamiento.setJustificacionRechazo(motivoRechazo);
         alojamientoRepository.save(alojamiento);
         return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);

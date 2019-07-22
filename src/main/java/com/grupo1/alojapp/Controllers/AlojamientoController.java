@@ -97,13 +97,15 @@ public class AlojamientoController {
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PostMapping("/alojamiento/check/{id}")
+    @PostMapping("alojamiento/check/{id}")
+    @ResponseBody
     public ResponseEntity<AlojamientoDTO> check(@PathVariable Long id){
         AlojamientoDTO alojamientoDTO = alojamientoService.checkAlojamiento(id);
         return ResponseEntity.ok(alojamientoDTO);
     }
 
     @PostMapping("/alojamiento/uncheck/{id}")
+    @ResponseBody
     public ResponseEntity<AlojamientoDTO> uncheck(@PathVariable Long id,@NotNull @RequestParam("justificacion") String justificacion){
         AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id, justificacion);
         return ResponseEntity.ok(alojamientoDTO);

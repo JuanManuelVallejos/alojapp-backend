@@ -44,7 +44,6 @@ public class Alojamiento implements Serializable {
 
     @NotNull
     private boolean eliminado;
-    @Null
     private Boolean checked;
     private String justificacionRechazo;
 
