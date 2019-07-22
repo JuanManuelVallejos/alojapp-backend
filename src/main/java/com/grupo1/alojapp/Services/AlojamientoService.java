@@ -131,6 +131,7 @@ public class AlojamientoService {
     public AlojamientoDTO checkAlojamiento(long idAlojamiento){
         Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
         alojamiento.setChecked(true);
+        alojamientoRepository.save(alojamiento);
         return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
     }
 
@@ -138,6 +139,7 @@ public class AlojamientoService {
         Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
         alojamiento.setChecked(false);
         alojamiento.setJustificacionRechazo(motivoRechazo);
+        alojamientoRepository.save(alojamiento);
         return alojamientoAssembly.map(alojamiento,AlojamientoDTO.class);
     }
 
