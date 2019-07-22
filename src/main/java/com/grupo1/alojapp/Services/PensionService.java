@@ -8,6 +8,8 @@ import com.grupo1.alojapp.Repositories.PensionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 public class PensionService {
 
@@ -30,6 +32,13 @@ public class PensionService {
         Pension pension = pensionRepository.getOne(pensionDTO.getIdPension());
         pensionRepository.delete(pension);
         return pension;
+    }
+
+    public void modificarPensionExistente(PensionDTO pensionDTO, PensionDTO pensionNuevaDTO){
+        Pension pension = pensionRepository.getOne(pensionDTO.getId());
+        pension.setTipopension(pensionNuevaDTO.getTipopension());
+        pension.setPrecio(pensionNuevaDTO.getPrecio());
+        pensionRepository.save(pension);
     }
 
 }

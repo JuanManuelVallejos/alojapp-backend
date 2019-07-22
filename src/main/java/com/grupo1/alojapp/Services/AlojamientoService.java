@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -158,6 +159,13 @@ public class AlojamientoService {
         alojamiento.getPensiones().remove(pension);
         alojamientoRepository.save(alojamiento);
         return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
+    }
+
+    public boolean modificarPensionSiExiste(AlojamientoDTO alojamientoDTO, PensionDTO pensionDTO){
+        Optional<PensionDTO> posiblePensionDTO = alojamientoDTO.getPensiones().stream().filter(pen -> pen.getTipopension() == pensionDTO.getTipopension()).findFirst();
+        if(!posiblePensionDTO.isPresent()) return false;
+        pensionService.modificarPensionExistente(posiblePensionDTO.get(), pensionDTO);
+        return true;
     }
 
 }

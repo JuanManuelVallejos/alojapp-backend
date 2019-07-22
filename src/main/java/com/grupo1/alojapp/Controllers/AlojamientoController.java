@@ -5,6 +5,7 @@ import com.grupo1.alojapp.DTOs.CloudFileDTO;
 import com.grupo1.alojapp.DTOs.DeletePensionDTO;
 import com.grupo1.alojapp.DTOs.PensionDTO;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
+import com.grupo1.alojapp.Model.Alojamiento;
 import com.grupo1.alojapp.Model.CloudFile;
 import com.grupo1.alojapp.Model.Pension;
 import com.grupo1.alojapp.Model.TIPOPENSION;
@@ -112,9 +113,16 @@ public class AlojamientoController {
     }
 
     @PostMapping("/alojamiento/agregarModificarPension/{id}")
-    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@PathVariable Long id, @RequestBody PensionDTO pensionDTO){
-        Pension pension = pensionService.createPension(pensionDTO);
-        AlojamientoDTO alojamientoDTO = alojamientoService.agregarPension(id, pension);
+    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@PathVariable Long id, @RequestBody PensionDTO pensionDTO) throws AlojamientoEliminadoException{
+        AlojamientoDTO alojamientoDTO = alojamientoService.getById(id);
+        if(alojamientoService.modificarPensionSiExiste(alojamientoDTO, pensionDTO)){
+            //Refresh
+            alojamientoDTO = alojamientoService.getById(id);
+        }
+        else{
+            Pension pension = pensionService.createPension(pensionDTO);
+            alojamientoDTO = alojamientoService.agregarPension(id, pension);
+        }
         return ResponseEntity.ok(alojamientoDTO);
     }
 
