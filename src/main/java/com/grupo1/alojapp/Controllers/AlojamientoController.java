@@ -104,7 +104,7 @@ public class AlojamientoController {
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PostMapping("/alojamiento/uncheck/{id}")
+    @PostMapping("alojamiento/uncheck/{id}")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> uncheck(@PathVariable Long id,@NotNull @RequestParam("justificacion") String justificacion){
         AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id, justificacion);
