@@ -1,23 +1,20 @@
 package com.grupo1.alojapp.Services;
 
-import com.grupo1.alojapp.Assemblies.AlojamientoAssembly;
-import com.grupo1.alojapp.Assemblies.CloudFileAssembly;
-import com.grupo1.alojapp.DTOs.AlojamientoDTO;
-import com.grupo1.alojapp.DTOs.DeletePensionDTO;
-import com.grupo1.alojapp.DTOs.PensionDTO;
-import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
-import com.grupo1.alojapp.Model.Alojamiento;
-import com.grupo1.alojapp.Model.CloudFile;
 import com.grupo1.alojapp.Model.Pension;
-import com.grupo1.alojapp.Model.TIPOPENSION;
+import com.grupo1.alojapp.DTOs.PensionDTO;
+import com.grupo1.alojapp.Model.CloudFile;
+import com.grupo1.alojapp.Model.Alojamiento;
+import com.grupo1.alojapp.DTOs.AlojamientoDTO;
+import org.springframework.stereotype.Service;
+import com.grupo1.alojapp.DTOs.DeletePensionDTO;
+import com.grupo1.alojapp.Assemblies.AlojamientoAssembly;
 import com.grupo1.alojapp.Repositories.AlojamientoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Service
