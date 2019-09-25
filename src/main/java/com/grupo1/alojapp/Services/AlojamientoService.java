@@ -150,12 +150,15 @@ public class AlojamientoService {
         return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
     }
 
-    public AlojamientoDTO eliminarPension(DeletePensionDTO pensionDTO){
-        Alojamiento alojamiento = alojamientoRepository.getOne(pensionDTO.getIdAlojamiento());
-        Pension pension = pensionService.getPension(pensionDTO.getIdPension());
-        alojamiento.getPensiones().remove(pension);
-        alojamientoRepository.save(alojamiento);
-        return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
+    public AlojamientoDTO eliminarPension(long idPension){
+    	Pension pension = pensionService.getPension(idPension);
+    	Optional<Alojamiento> alojamiento = alojamientoRepository.findAll().stream().filter(alojam -> alojam.getPensiones().contains(pension)).findFirst();
+    	if(alojamiento.isPresent()) {
+            alojamiento.get().getPensiones().remove(pension);
+            alojamientoRepository.save(alojamiento.get());
+            return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
+    	}
+    	return new AlojamientoDTO();
     }
 
     public boolean modificarPensionSiExiste(AlojamientoDTO alojamientoDTO, PensionDTO pensionDTO){

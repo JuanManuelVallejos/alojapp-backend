@@ -70,7 +70,7 @@ public class AlojamientoControllerTest {
 
         doReturn(alojamientosListExpected).when(alojamientoServiceMock).getAllPorValidar();
 
-        assertEquals(alojamientosResponseExpected,alojamientoController.getAlojamientosPorValidar());
+        assertEquals(alojamientosResponseExpected,alojamientoController.getPorEstados("PORVALIDAR"));
         verify(alojamientoServiceMock, times(1)).getAllPorValidar();
     }
 
@@ -82,7 +82,7 @@ public class AlojamientoControllerTest {
 
         doReturn(alojamientosListExpected).when(alojamientoServiceMock).getAllValidados();
 
-        assertEquals(alojamientosResponseExpected,alojamientoController.getAlojamientosValidados());
+        assertEquals(alojamientosResponseExpected,alojamientoController.getPorEstados("VALIDADO"));
         verify(alojamientoServiceMock, times(1)).getAllValidados();
     }
 
@@ -94,7 +94,7 @@ public class AlojamientoControllerTest {
 
         doReturn(alojamientosListExpected).when(alojamientoServiceMock).getAllRechazados();
 
-        assertEquals(alojamientosResponseExpected,alojamientoController.getAllRechazados());
+        assertEquals(alojamientosResponseExpected,alojamientoController.getPorEstados("RECHAZADO"));
         verify(alojamientoServiceMock, times(1)).getAllRechazados();
     }
 
@@ -189,9 +189,9 @@ public class AlojamientoControllerTest {
         doReturn(anyAlojamiento).when(alojamientoServiceMock).getById(anyLong());
         doReturn(true).when(alojamientoServiceMock).modificarPensionSiExiste(any(AlojamientoDTO.class), any(PensionDTO.class));
 
-        assertEquals(alojamientoResponseExpected, alojamientoController.agregarModificarPension(ID_TEST, anyPension));
+        assertEquals(alojamientoResponseExpected, alojamientoController.agregarModificarPension(anyPension));
         verify(alojamientoServiceMock, times(1)).modificarPensionSiExiste(anyAlojamiento, anyPension);
-        verify(alojamientoServiceMock, times(2)).getById(ID_TEST);
+        verify(alojamientoServiceMock, times(2)).getById(anyPension.idalojamiento);
         verify(pensionServiceMock, times(0)).createPension(any(PensionDTO.class));
     }
 
@@ -208,11 +208,11 @@ public class AlojamientoControllerTest {
         doReturn(pensionMock).when(pensionServiceMock).createPension(any(PensionDTO.class));
         doReturn(anyAlojamiento).when(alojamientoServiceMock).agregarPension(anyLong(),any(Pension.class));
 
-        assertEquals(alojamientoResponseExpected, alojamientoController.agregarModificarPension(ID_TEST, anyPension));
-        verify(alojamientoServiceMock, times(1)).getById(ID_TEST);
+        assertEquals(alojamientoResponseExpected, alojamientoController.agregarModificarPension(anyPension));
+        verify(alojamientoServiceMock, times(1)).getById(anyPension.idalojamiento);
         verify(alojamientoServiceMock, times(1)).modificarPensionSiExiste(anyAlojamiento, anyPension);
         verify(pensionServiceMock, times(1)).createPension(anyPension);
-        verify(alojamientoServiceMock, times(1)).agregarPension(ID_TEST, pensionMock);
+        verify(alojamientoServiceMock, times(1)).agregarPension(anyPension.idalojamiento, pensionMock);
     }
 
 }

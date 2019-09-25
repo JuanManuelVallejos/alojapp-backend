@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT })
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE })
 public class AlojamientoController {
 
     static Logger log = Logger.getLogger(AlojamientoController.class.getName());
@@ -33,7 +35,7 @@ public class AlojamientoController {
     @Autowired
     private CloudFileController cloudFileController;
 
-    @GetMapping("alojamiento/get")
+    @GetMapping("alojamiento")
     @ResponseBody
     public ResponseEntity<List<AlojamientoDTO>> getAlojamientosVigentes(){
         log.debug("Se piden todos los alojamientos");
@@ -41,57 +43,52 @@ public class AlojamientoController {
         return ResponseEntity.ok(alojamientosDTO);
     }
 
-    @GetMapping("alojamiento/getPorValidar")
-    @ResponseBody
-    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosPorValidar(){
-        log.debug("Se piden todos los alojamientos");
-        List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllPorValidar();
-        return ResponseEntity.ok(alojamientosDTO);
-    }
-
-    @GetMapping("alojamiento/getValidados")
-    @ResponseBody
-    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosValidados(){
-        log.debug("Se piden los alojamientos validados");
-        List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllValidados();
-        return ResponseEntity.ok(alojamientosDTO);
-    }
-
-    @GetMapping("alojamiento/getRechazados")
-    @ResponseBody
-    public ResponseEntity<List<AlojamientoDTO>> getAllRechazados(){
-        log.debug("Se piden los alojamientos rechazados");
-        List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllRechazados();
-        return ResponseEntity.ok(alojamientosDTO);
-    }
-
-    @GetMapping("alojamiento/get/{id}")
+    @GetMapping("alojamiento/{id}")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> getAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException {
         AlojamientoDTO alojamientoDTO = alojamientoService.getById(id);
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PostMapping("alojamiento/create")
+    @PostMapping("alojamiento")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> saveOrUpdateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
         alojamientoService.saveAlojamientoFromDTO(alojamientoDTO);
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PostMapping("alojamiento/update")
+    @PatchMapping("alojamiento")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> updateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
         return saveOrUpdateAlojamiento(alojamientoDTO);
     }
 
-    @PutMapping("alojamiento/delete/{id}")
+    @DeleteMapping("alojamiento/{id}")
     @ResponseBody
     public void deleteAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException{
         alojamientoService.deleteAlojamientoById(id);
     }
 
-    @PostMapping("/alojamiento/uploadFile/{id}")
+    @GetMapping("alojamiento/estado/{estado}")
+    @ResponseBody
+    public ResponseEntity<List<AlojamientoDTO>> getPorEstados(@PathVariable String estado) {
+    	log.debug("Se piden todos los alojamientos con estado " + estado);
+    	List<AlojamientoDTO> response = new ArrayList<AlojamientoDTO>();
+    	switch (estado) {
+    		case "PORVALIDAR":
+    			response = alojamientoService.getAllPorValidar();
+    			break;
+    		case "VALIDADO":
+    			response = alojamientoService.getAllValidados();
+    			break;
+    		case "RECHAZADO":
+    			response = alojamientoService.getAllRechazados();
+    			break;
+    	}
+    	return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/file/{id}")
     public ResponseEntity<AlojamientoDTO> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws Exception{
         CloudFile cloudFile = cloudFileController.uploadFile(file);
         AlojamientoDTO alojamientoDTO = alojamientoService.addCloudFileToAlojamiento(cloudFile,id);
@@ -112,24 +109,24 @@ public class AlojamientoController {
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PostMapping("/alojamiento/agregarModificarPension/{id}")
-    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@PathVariable Long id, @RequestBody PensionDTO pensionDTO) throws AlojamientoEliminadoException{
-        AlojamientoDTO alojamientoDTO = alojamientoService.getById(id);
+    @PutMapping("/pension")
+    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@RequestBody PensionDTO pensionDTO) throws AlojamientoEliminadoException{
+        AlojamientoDTO alojamientoDTO = alojamientoService.getById(pensionDTO.idalojamiento);
         if(alojamientoService.modificarPensionSiExiste(alojamientoDTO, pensionDTO)){
             //Refresh
-            alojamientoDTO = alojamientoService.getById(id);
+            alojamientoDTO = alojamientoService.getById(pensionDTO.idalojamiento);
         }
         else{
             Pension pension = pensionService.createPension(pensionDTO);
-            alojamientoDTO = alojamientoService.agregarPension(id, pension);
+            alojamientoDTO = alojamientoService.agregarPension(pensionDTO.idalojamiento, pension);
         }
         return ResponseEntity.ok(alojamientoDTO);
     }
 
-    @PostMapping("/alojamiento/deletePension")
-    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@RequestBody DeletePensionDTO pensionDTO){
-        AlojamientoDTO alojamientoDTO = alojamientoService.eliminarPension(pensionDTO);
-        pensionService.deletePension(pensionDTO);
+    @DeleteMapping("/pension/{id}")
+    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@PathVariable long id){
+        AlojamientoDTO alojamientoDTO = alojamientoService.eliminarPension(id);
+        pensionService.deletePension(id);
         return ResponseEntity.ok(alojamientoDTO);
     }
 

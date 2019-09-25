@@ -28,8 +28,8 @@ public class PensionService {
         return pension;
     }
 
-    public Pension deletePension(DeletePensionDTO pensionDTO){
-        Pension pension = pensionRepository.getOne(pensionDTO.getIdPension());
+    public Pension deletePension(long idPension){
+        Pension pension = pensionRepository.getOne(idPension);
         pensionRepository.delete(pension);
         return pension;
     }

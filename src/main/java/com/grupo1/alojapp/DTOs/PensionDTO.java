@@ -9,6 +9,8 @@ public class PensionDTO {
     private TIPOPENSION tipopension;
     private Float precio;
 
+    public long idalojamiento;
+    
     public TIPOPENSION getTipopension() {
         return tipopension;
     }

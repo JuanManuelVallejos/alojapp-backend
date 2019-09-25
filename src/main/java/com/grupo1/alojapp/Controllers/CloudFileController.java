@@ -16,13 +16,13 @@ public class CloudFileController {
     private CloudFileService cloudFileService;
     static Logger logger = Logger.getLogger(AlojamientoController.class.getName());
 
-    @PostMapping("/cloud/uploadFile")
+    @PostMapping("/cloud")
     public CloudFile uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         CloudFile cloudFile = cloudFileService.uploadCloudFile(file);
         return cloudFile;
     }
 
-    @PutMapping("cloud/deleteFile/{idCloudFile:.+}")
+    @DeleteMapping("cloud/{idCloudFile:.+}")
     public ResponseEntity deleteFile(@PathVariable long idCloudFile) {
         logger.debug("Se elimina file de id: "+idCloudFile);
         cloudFileService.deleteCloudFile(idCloudFile);
