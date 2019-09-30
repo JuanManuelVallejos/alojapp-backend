@@ -1,10 +1,12 @@
 package com.grupo1.alojapp.Services;
 
+import com.grupo1.alojapp.Controllers.AlojamientoController;
 import com.grupo1.alojapp.Model.Pension;
 import com.grupo1.alojapp.DTOs.PensionDTO;
 import com.grupo1.alojapp.Model.CloudFile;
 import com.grupo1.alojapp.Model.Alojamiento;
 import com.grupo1.alojapp.DTOs.AlojamientoDTO;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import com.grupo1.alojapp.DTOs.DeletePensionDTO;
 import com.grupo1.alojapp.Assemblies.AlojamientoAssembly;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 public class AlojamientoService {
 
+    static Logger log = Logger.getLogger(AlojamientoController.class.getName());
+
     @Autowired
     private AlojamientoRepository alojamientoRepository;
     @Autowired
@@ -30,8 +34,11 @@ public class AlojamientoService {
 
     private AlojamientoDTO getAlojamientoVigenteById(Long id) throws AlojamientoEliminadoException{
         Alojamiento alojamiento = alojamientoRepository.getOne(id);
-        if(alojamiento.isEliminado())
-            throw new AlojamientoEliminadoException("El alojamiento de id:"+ id+" se encuentra eliminado");
+        if(alojamiento.isEliminado()){
+            String msj_error = "El alojamiento de id:"+ id+" se encuentra eliminado";
+            log.error(msj_error);
+            throw new AlojamientoEliminadoException(msj_error);
+        }
         return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);
     }
 
@@ -44,8 +51,11 @@ public class AlojamientoService {
 
     public void deleteAlojamientoById(Long id) throws AlojamientoEliminadoException{
         Alojamiento alojamiento = alojamientoRepository.getOne(id);
-        if(alojamiento.isEliminado())
-            throw new AlojamientoEliminadoException("Este alojamiento YA se encuentra eliminado");
+        if(alojamiento.isEliminado()){
+            String msj_error = "El alojamiento de id:"+ id+" se encuentra eliminado";
+            log.error(msj_error);
+            throw new AlojamientoEliminadoException(msj_error);
+        }
         alojamiento.setEliminado(true);
         alojamientoRepository.save(alojamiento);
     }

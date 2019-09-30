@@ -38,7 +38,7 @@ public class AlojamientoController {
     @GetMapping("alojamiento")
     @ResponseBody
     public ResponseEntity<List<AlojamientoDTO>> getAlojamientosVigentes(){
-        log.debug("Se piden todos los alojamientos");
+        log.info("Se piden todos los alojamientos");
         List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllVigentes();
         return ResponseEntity.ok(alojamientosDTO);
     }
@@ -46,6 +46,7 @@ public class AlojamientoController {
     @GetMapping("alojamiento/{id}")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> getAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException {
+        log.info("Se pide alojamiento de id: "+id);
         AlojamientoDTO alojamientoDTO = alojamientoService.getById(id);
         return ResponseEntity.ok(alojamientoDTO);
     }
@@ -53,6 +54,7 @@ public class AlojamientoController {
     @PostMapping("alojamiento")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> saveOrUpdateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
+        log.info("se crea alojamiento");
         alojamientoService.saveAlojamientoFromDTO(alojamientoDTO);
         return ResponseEntity.ok(alojamientoDTO);
     }
@@ -60,19 +62,21 @@ public class AlojamientoController {
     @PatchMapping("alojamiento")
     @ResponseBody
     public ResponseEntity<AlojamientoDTO> updateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
+        log.info("Se quiere actualizar alojamiento de id: "+alojamientoDTO.getId());
         return saveOrUpdateAlojamiento(alojamientoDTO);
     }
 
     @DeleteMapping("alojamiento/{id}")
     @ResponseBody
     public void deleteAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException{
+        log.info("Se quiere eliminar alojamiento de id: "+id);
         alojamientoService.deleteAlojamientoById(id);
     }
 
     @GetMapping("alojamiento/estado/{estado}")
     @ResponseBody
     public ResponseEntity<List<AlojamientoDTO>> getPorEstados(@PathVariable String estado) {
-    	log.debug("Se piden todos los alojamientos con estado " + estado);
+    	log.info("Se piden todos los alojamientos con estado " + estado);
     	List<AlojamientoDTO> response = new ArrayList<AlojamientoDTO>();
     	switch (estado) {
     		case "PORVALIDAR":
@@ -111,6 +115,7 @@ public class AlojamientoController {
 
     @PutMapping("/pension")
     public ResponseEntity<AlojamientoDTO> agregarModificarPension(@RequestBody PensionDTO pensionDTO) throws AlojamientoEliminadoException{
+        log.info("Se quiere agregar pension a alojamiento: "+pensionDTO.idalojamiento);
         AlojamientoDTO alojamientoDTO = alojamientoService.getById(pensionDTO.idalojamiento);
         if(alojamientoService.modificarPensionSiExiste(alojamientoDTO, pensionDTO)){
             //Refresh
