@@ -1,5 +1,6 @@
 package com.grupo1.alojapp.Controller;
 
+import com.grupo1.alojapp.DTOs.CloudFileDTO;
 import org.junit.Test;
 import java.util.List;
 import org.junit.Before;
@@ -144,13 +145,13 @@ public class AlojamientoControllerTest {
         long ID_TEST = 1;
         AlojamientoDTO anyAlojamiento = new AlojamientoDTO();
         MultipartFile file = mock(MultipartFile.class);
-        CloudFile cloudFile = mock(CloudFile.class);
+        CloudFileDTO cloudFile = mock(CloudFileDTO.class);
 
-        doReturn(cloudFile).when(cloudFileControllerMock).uploadFile(file);
+        doReturn(cloudFile).when(cloudFileControllerMock).internalUploadCloudFile(file);
         doReturn(anyAlojamiento).when(alojamientoServiceMock).addCloudFileToAlojamiento(cloudFile, ID_TEST);
 
         assertEquals(ResponseEntity.ok(anyAlojamiento), alojamientoController.uploadFile(file,ID_TEST));
-        verify(cloudFileControllerMock, times(1)).uploadFile(file);
+        verify(cloudFileControllerMock, times(1)).internalUploadCloudFile(file);
         verify(alojamientoServiceMock, times(1)).addCloudFileToAlojamiento(cloudFile,ID_TEST);
     }
 

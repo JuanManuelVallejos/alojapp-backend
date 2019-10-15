@@ -3,7 +3,7 @@ package com.grupo1.alojapp.DTOs;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public class UserDTO {
+public class UserDTO extends ResponseDTO<UserDTO>{
 
     private Long id;
     private String firstName;

@@ -1,6 +1,8 @@
 package com.grupo1.alojapp.Services;
 
+import com.grupo1.alojapp.Assemblies.CloudFileAssembly;
 import com.grupo1.alojapp.Controllers.AlojamientoController;
+import com.grupo1.alojapp.DTOs.CloudFileDTO;
 import com.grupo1.alojapp.Model.Pension;
 import com.grupo1.alojapp.DTOs.PensionDTO;
 import com.grupo1.alojapp.Model.CloudFile;
@@ -30,7 +32,7 @@ public class AlojamientoService {
     private PensionService pensionService;
 
     private AlojamientoAssembly alojamientoAssembly = new AlojamientoAssembly();
-
+    private CloudFileAssembly cloudFileAssembly = new CloudFileAssembly();
 
     private AlojamientoDTO getAlojamientoVigenteById(Long id) throws AlojamientoEliminadoException{
         Alojamiento alojamiento = alojamientoRepository.getOne(id);
@@ -100,8 +102,9 @@ public class AlojamientoService {
         return alojamientosDTO;
     }
 
-    public AlojamientoDTO addCloudFileToAlojamiento(CloudFile cloudFile, long idAlojamiento){
+    public AlojamientoDTO addCloudFileToAlojamiento(CloudFileDTO cloudFileDTO, long idAlojamiento){
         Alojamiento alojamiento = alojamientoRepository.getOne(idAlojamiento);
+        CloudFile cloudFile = cloudFileAssembly.map(cloudFileDTO, CloudFile.class);
         alojamiento.addReferenceFile(cloudFile);
         alojamientoRepository.save(alojamiento);
         return alojamientoAssembly.map(alojamiento, AlojamientoDTO.class);

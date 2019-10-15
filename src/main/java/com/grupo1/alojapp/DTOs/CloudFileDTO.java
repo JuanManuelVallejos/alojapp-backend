@@ -1,20 +1,11 @@
 package com.grupo1.alojapp.DTOs;
 
-public class CloudFileDTO {
+public class CloudFileDTO extends ResponseDTO<CloudFileDTO> {
     private long id;
     private String fileName;
     private String fileDownloadUri;
     private String fileType;
     private long size;
-
-    public CloudFileDTO(){}
-
-    public CloudFileDTO(String fileName, String fileDownloadUri, String fileType, long size) {
-        this.fileName = fileName;
-        this.fileDownloadUri = fileDownloadUri;
-        this.fileType = fileType;
-        this.size = size;
-    }
 
     public String getFileName() {
         return fileName;

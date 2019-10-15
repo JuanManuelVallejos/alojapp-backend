@@ -1,9 +1,6 @@
 package com.grupo1.alojapp.Controllers;
 
-import com.grupo1.alojapp.DTOs.AlojamientoDTO;
-import com.grupo1.alojapp.DTOs.CloudFileDTO;
-import com.grupo1.alojapp.DTOs.DeletePensionDTO;
-import com.grupo1.alojapp.DTOs.PensionDTO;
+import com.grupo1.alojapp.DTOs.*;
 import com.grupo1.alojapp.Exceptions.AlojamientoEliminadoException;
 import com.grupo1.alojapp.Model.Alojamiento;
 import com.grupo1.alojapp.Model.CloudFile;
@@ -94,8 +91,8 @@ public class AlojamientoController {
     
     @PostMapping("/file/{id}")
     public ResponseEntity<AlojamientoDTO> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws Exception{
-        CloudFile cloudFile = cloudFileController.uploadFile(file);
-        AlojamientoDTO alojamientoDTO = alojamientoService.addCloudFileToAlojamiento(cloudFile,id);
+        CloudFileDTO cloudFileDTO = cloudFileController.internalUploadCloudFile(file);
+        AlojamientoDTO alojamientoDTO = alojamientoService.addCloudFileToAlojamiento(cloudFileDTO, id);
         return ResponseEntity.ok(alojamientoDTO);
     }
 

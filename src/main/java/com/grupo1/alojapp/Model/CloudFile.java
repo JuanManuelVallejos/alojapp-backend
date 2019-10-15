@@ -1,5 +1,7 @@
 package com.grupo1.alojapp.Model;
 
+import com.grupo1.alojapp.DTOs.ResponseDTO;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;

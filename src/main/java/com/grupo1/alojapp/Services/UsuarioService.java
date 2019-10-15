@@ -3,6 +3,7 @@ package com.grupo1.alojapp.Services;
 import com.grupo1.alojapp.Assemblies.UsuarioAssembly;
 import com.grupo1.alojapp.DTOs.LoginDTO;
 import com.grupo1.alojapp.DTOs.UserDTO;
+import com.grupo1.alojapp.Exceptions.RoleNotFoundException;
 import com.grupo1.alojapp.Model.Rol;
 import com.grupo1.alojapp.Model.Usuario;
 import com.grupo1.alojapp.Repositories.UsuarioRepository;
@@ -50,7 +51,7 @@ public class UsuarioService {
                 accountNonLocked, authorities);
     }
 
-    public UserDTO registrarUsuarioFromDTO(UserDTO userDTO){
+    public UserDTO registrarUsuarioFromDTO(UserDTO userDTO) throws RoleNotFoundException {
         Collection<Rol> roles = rolService.getListRoleByNames(userDTO.getRoles());
 
         Usuario usuario =
