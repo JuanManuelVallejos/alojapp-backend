@@ -2,6 +2,7 @@ package com.grupo1.alojapp.Controllers;
 
 import com.grupo1.alojapp.DTOs.LoginDTO;
 import com.grupo1.alojapp.DTOs.ResponseDTO;
+import com.grupo1.alojapp.DTOs.ResponseHttp;
 import com.grupo1.alojapp.DTOs.UserDTO;
 import com.grupo1.alojapp.Exceptions.RoleNotFoundException;
 import com.grupo1.alojapp.Services.UsuarioService;
@@ -24,19 +25,19 @@ public class UsuarioController {
 
     @PostMapping("usuario")
     @ResponseBody
-    public ResponseEntity<ResponseDTO<UserDTO>> registrarUsuario(@RequestBody UserDTO userDTO){
+    public ResponseEntity<ResponseHttp> registrarUsuario(@RequestBody UserDTO userDTO){
         try{
             usuarioService.registrarUsuarioFromDTO(userDTO);
         }
         catch(RoleNotFoundException roleException){
             return ResponseEntity.badRequest()
-                    .body(new ResponseDTO<UserDTO>(
+                    .body(new ResponseDTO(
                             "Checkee que se esten enviando correctamente los roles"));
         }
         catch(Exception e){
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO<UserDTO>(
+                    .body(new ResponseDTO(
                     "Ha ocurrido un error inesperado."));
         }
 

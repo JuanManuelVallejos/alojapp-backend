@@ -2,6 +2,7 @@ package com.grupo1.alojapp.Controllers;
 
 import com.grupo1.alojapp.DTOs.CloudFileDTO;
 import com.grupo1.alojapp.DTOs.ResponseDTO;
+import com.grupo1.alojapp.DTOs.ResponseHttp;
 import com.grupo1.alojapp.Exceptions.CloudFileNotFoundException;
 import com.grupo1.alojapp.Exceptions.UploadCloudFileException;
 import com.grupo1.alojapp.Services.CloudFileService;
@@ -22,18 +23,18 @@ public class CloudFileController {
     static Logger logger = Logger.getLogger(AlojamientoController.class.getName());
 
     @PostMapping("/cloud")
-    public ResponseEntity<ResponseDTO<CloudFileDTO>> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ResponseHttp> uploadFile(@RequestParam("file") MultipartFile file) {
         try{
             CloudFileDTO cloudFileDto = this.internalUploadCloudFile(file);
             return ResponseEntity.ok(cloudFileDto);
         }catch(UploadCloudFileException uploadException){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO<CloudFileDTO>(
+                    .body(new ResponseDTO(
                             "Hubo un error al subir archivo al servidor externo"));
         }catch(Exception uploadException){
             logger.error(uploadException.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO<CloudFileDTO>(
+                    .body(new ResponseDTO(
                             "Ha ocurrido un error inesperado."));
         }
     }

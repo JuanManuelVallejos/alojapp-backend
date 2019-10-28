@@ -1,6 +1,6 @@
 package com.grupo1.alojapp.DTOs;
 
-public class CloudFileDTO extends ResponseDTO<CloudFileDTO> {
+public class CloudFileDTO extends ResponseHttp{
     private long id;
     private String fileName;
     private String fileDownloadUri;

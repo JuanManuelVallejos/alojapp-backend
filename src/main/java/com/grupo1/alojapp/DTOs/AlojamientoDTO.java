@@ -5,7 +5,7 @@ import com.grupo1.alojapp.Model.TIPOALOJAMIENTO;
 import javax.validation.constraints.Null;
 import java.util.Collection;
 
-public class AlojamientoDTO {
+public class AlojamientoDTO extends ResponseHttp{
 
     private Long id;
     private String nombre;

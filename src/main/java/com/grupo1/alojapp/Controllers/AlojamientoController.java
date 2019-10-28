@@ -10,6 +10,7 @@ import com.grupo1.alojapp.Services.AlojamientoService;
 import com.grupo1.alojapp.Services.PensionService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,32 +43,54 @@ public class AlojamientoController {
 
     @GetMapping("alojamiento/{id}")
     @ResponseBody
-    public ResponseEntity<AlojamientoDTO> getAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException {
+    public ResponseEntity<ResponseHttp> getAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException {
         log.info("Se pide alojamiento de id: "+id);
-        AlojamientoDTO alojamientoDTO = alojamientoService.getById(id);
-        return ResponseEntity.ok(alojamientoDTO);
+        try{
+            AlojamientoDTO alojamientoDTO = alojamientoService.getById(id);
+            return ResponseEntity.ok(alojamientoDTO);
+        }
+        catch (AlojamientoEliminadoException ex){
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO(ex.getMessage()));
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
+        }
     }
 
     @PostMapping("alojamiento")
     @ResponseBody
-    public ResponseEntity<AlojamientoDTO> saveOrUpdateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
+    public ResponseEntity<ResponseHttp> saveOrUpdateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
         log.info("se crea alojamiento");
-        alojamientoService.saveAlojamientoFromDTO(alojamientoDTO);
-        return ResponseEntity.ok(alojamientoDTO);
+        try{
+            alojamientoService.saveAlojamientoFromDTO(alojamientoDTO);
+            return ResponseEntity.ok(alojamientoDTO);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
+        }
     }
 
     @PatchMapping("alojamiento")
     @ResponseBody
-    public ResponseEntity<AlojamientoDTO> updateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
-        log.info("Se quiere actualizar alojamiento de id: "+alojamientoDTO.getId());
+    public ResponseEntity<ResponseHttp> updateAlojamiento(@RequestBody AlojamientoDTO alojamientoDTO){
         return saveOrUpdateAlojamiento(alojamientoDTO);
     }
 
     @DeleteMapping("alojamiento/{id}")
     @ResponseBody
-    public void deleteAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException{
+    public ResponseEntity<ResponseHttp> deleteAlojamiento(@PathVariable Long id) throws AlojamientoEliminadoException{
         log.info("Se quiere eliminar alojamiento de id: "+id);
-        alojamientoService.deleteAlojamientoById(id);
+        try{
+            alojamientoService.deleteAlojamientoById(id);
+            return ResponseEntity.ok(null);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
+        }
     }
 
     @GetMapping("alojamiento/estado/{estado}")
@@ -90,46 +113,76 @@ public class AlojamientoController {
     }
     
     @PostMapping("/file/{id}")
-    public ResponseEntity<AlojamientoDTO> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws Exception{
-        CloudFileDTO cloudFileDTO = cloudFileController.internalUploadCloudFile(file);
-        AlojamientoDTO alojamientoDTO = alojamientoService.addCloudFileToAlojamiento(cloudFileDTO, id);
-        return ResponseEntity.ok(alojamientoDTO);
+    public ResponseEntity<ResponseHttp> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws Exception{
+        try{
+            CloudFileDTO cloudFileDTO = cloudFileController.internalUploadCloudFile(file);
+            AlojamientoDTO alojamientoDTO = alojamientoService.addCloudFileToAlojamiento(cloudFileDTO, id);
+            return ResponseEntity.ok(alojamientoDTO);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
+        }
     }
 
     @PostMapping("alojamiento/check/{id}")
     @ResponseBody
-    public ResponseEntity<AlojamientoDTO> check(@PathVariable Long id){
-        AlojamientoDTO alojamientoDTO = alojamientoService.checkAlojamiento(id);
-        return ResponseEntity.ok(alojamientoDTO);
+    public ResponseEntity<ResponseHttp> check(@PathVariable Long id){
+        try{
+            AlojamientoDTO alojamientoDTO = alojamientoService.checkAlojamiento(id);
+            return ResponseEntity.ok(alojamientoDTO);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
+        }
     }
 
     @PostMapping("alojamiento/uncheck/{id}")
     @ResponseBody
-    public ResponseEntity<AlojamientoDTO> uncheck(@PathVariable Long id,@NotNull @RequestParam("justificacion") String justificacion){
-        AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id, justificacion);
-        return ResponseEntity.ok(alojamientoDTO);
+    public ResponseEntity<ResponseHttp> uncheck(@PathVariable Long id,@NotNull @RequestParam("justificacion") String justificacion){
+        try{
+            AlojamientoDTO alojamientoDTO = alojamientoService.uncheckAlojamiento(id, justificacion);
+            return ResponseEntity.ok(alojamientoDTO);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
+        }
     }
 
     @PutMapping("/pension")
-    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@RequestBody PensionDTO pensionDTO) throws AlojamientoEliminadoException{
+    public ResponseEntity<ResponseHttp> agregarModificarPension(@RequestBody PensionDTO pensionDTO) throws AlojamientoEliminadoException{
         log.info("Se quiere agregar pension a alojamiento: "+pensionDTO.idalojamiento);
-        AlojamientoDTO alojamientoDTO = alojamientoService.getById(pensionDTO.idalojamiento);
-        if(alojamientoService.modificarPensionSiExiste(alojamientoDTO, pensionDTO)){
-            //Refresh
-            alojamientoDTO = alojamientoService.getById(pensionDTO.idalojamiento);
+        try{
+            AlojamientoDTO alojamientoDTO = alojamientoService.getById(pensionDTO.idalojamiento);
+            if(alojamientoService.modificarPensionSiExiste(alojamientoDTO, pensionDTO)){
+                //Refresh
+                alojamientoDTO = alojamientoService.getById(pensionDTO.idalojamiento);
+            }
+            else{
+                Pension pension = pensionService.createPension(pensionDTO);
+                alojamientoDTO = alojamientoService.agregarPension(pensionDTO.idalojamiento, pension);
+            }
+            return ResponseEntity.ok(alojamientoDTO);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
         }
-        else{
-            Pension pension = pensionService.createPension(pensionDTO);
-            alojamientoDTO = alojamientoService.agregarPension(pensionDTO.idalojamiento, pension);
-        }
-        return ResponseEntity.ok(alojamientoDTO);
     }
 
     @DeleteMapping("/pension/{id}")
-    public ResponseEntity<AlojamientoDTO> agregarModificarPension(@PathVariable long id){
-        AlojamientoDTO alojamientoDTO = alojamientoService.eliminarPension(id);
-        pensionService.deletePension(id);
-        return ResponseEntity.ok(alojamientoDTO);
+    public ResponseEntity<ResponseHttp> agregarModificarPension(@PathVariable long id){
+        try{
+            AlojamientoDTO alojamientoDTO = alojamientoService.eliminarPension(id);
+            pensionService.deletePension(id);
+            return ResponseEntity.ok(alojamientoDTO);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO("Ha ocurrido un error inesperado."));
+        }
     }
 
 }
