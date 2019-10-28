@@ -194,9 +194,9 @@ public class AlojamientoController {
     @DeleteMapping("/pension/{id}")
     public ResponseEntity<ResponseHttp> agregarModificarPension(@PathVariable long id){
         try{
-            AlojamientoDTO alojamientoDTO = alojamientoService.eliminarPension(id);
+            alojamientoService.eliminarPension(id);
             pensionService.deletePension(id);
-            return ResponseEntity.ok(alojamientoDTO);
+            return ResponseEntity.ok(null);
         }catch(Exception exception){
             log.error(exception.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
