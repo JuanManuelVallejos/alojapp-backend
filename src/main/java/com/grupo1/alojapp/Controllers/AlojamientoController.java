@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -35,10 +36,17 @@ public class AlojamientoController {
 
     @GetMapping("alojamiento")
     @ResponseBody
-    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosVigentes(){
+    public ResponseEntity<List<ResponseHttp>> getAlojamientosVigentes(){
         log.info("Se piden todos los alojamientos");
-        List<AlojamientoDTO> alojamientosDTO = alojamientoService.getAllVigentes();
-        return ResponseEntity.ok(alojamientosDTO);
+        try{
+            List<ResponseHttp> response = new ArrayList<>();
+            response.addAll(alojamientoService.getAllVigentes());
+            return ResponseEntity.ok(response);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Arrays.asList(new ResponseDTO("Ha ocurrido un error inesperado.")));
+        }
     }
 
     @GetMapping("alojamiento/{id}")
@@ -95,21 +103,32 @@ public class AlojamientoController {
 
     @GetMapping("alojamiento/estado/{estado}")
     @ResponseBody
-    public ResponseEntity<List<AlojamientoDTO>> getPorEstados(@PathVariable String estado) {
+    public ResponseEntity<List<ResponseHttp>> getPorEstados(@PathVariable String estado) {
     	log.info("Se piden todos los alojamientos con estado " + estado);
-    	List<AlojamientoDTO> response = new ArrayList<AlojamientoDTO>();
-    	switch (estado) {
-    		case "PORVALIDAR":
-    			response = alojamientoService.getAllPorValidar();
-    			break;
-    		case "VALIDADO":
-    			response = alojamientoService.getAllValidados();
-    			break;
-    		case "RECHAZADO":
-    			response = alojamientoService.getAllRechazados();
-    			break;
-    	}
-    	return ResponseEntity.ok(response);
+    	try {
+            List<ResponseHttp> response = new ArrayList<>();
+            List<AlojamientoDTO> alojamientoDTOS = new ArrayList<>();
+            switch (estado) {
+                case "PORVALIDAR":
+                    alojamientoDTOS = alojamientoService.getAllPorValidar();
+                    break;
+                case "VALIDADO":
+                    alojamientoDTOS = alojamientoService.getAllValidados();
+                    break;
+                case "RECHAZADO":
+                    alojamientoDTOS = alojamientoService.getAllRechazados();
+                    break;
+                default:
+                    return ResponseEntity.badRequest()
+                            .body(Arrays.asList(new ResponseDTO("Nombre de estado inválido")));
+            }
+            response.addAll(alojamientoDTOS);
+            return ResponseEntity.ok(response);
+        }catch(Exception exception){
+            log.error(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Arrays.asList(new ResponseDTO("Ha ocurrido un error inesperado.")));
+        }
     }
     
     @PostMapping("/file/{id}")
