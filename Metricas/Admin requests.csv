@@ -1,0 +1,7 @@
+"Method","Name","# requests","# failures","Median response time","Average response time","Min response time","Max response time","Average Content Size","Requests/s"
+"GET","/alojamiento",2,0,18310,19915,18310,21521,6360,0.02
+"GET","/alojamiento/23",1,0,2097,2097,2097,2097,312,0.01
+"POST","/alojamiento/check/23",1,0,2355,2355,2355,2355,312,0.01
+"POST","/alojamiento/uncheck/10?justificacion=Direccion%20mal%20cargada",1,0,2482,2482,2482,2482,283,0.01
+"POST","/usuario/login",1,0,2371,2371,2371,2371,226,0.01
+"None","Aggregated",6,0,2400,8189,2097,21521,2308,0.07
