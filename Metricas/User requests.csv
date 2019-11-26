@@ -1,0 +1,5 @@
+"Method","Name","# requests","# failures","Median response time","Average response time","Min response time","Max response time","Average Content Size","Requests/s"
+"POST","/alojamiento",1,0,2051,2051,2051,2051,322,0.01
+"GET","/alojamiento/estado/VALIDADO",1,0,47376,47376,47376,47376,1147,0.01
+"POST","/usuario/login",2,0,2743,2763,2743,2782,218,0.03
+"None","Aggregated",4,0,2700,13738,2051,47376,476,0.05

@@ -131,7 +131,7 @@ public class AlojamientoController {
         }
     }
     
-    @PostMapping("/file/{id}")
+    @PostMapping("alojamiento/addFile/{id}")
     public ResponseEntity<ResponseHttp> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws Exception{
         try{
             CloudFileDTO cloudFileDTO = cloudFileController.internalUploadCloudFile(file);
@@ -170,7 +170,7 @@ public class AlojamientoController {
         }
     }
 
-    @PutMapping("/pension")
+    @PutMapping("pension")
     public ResponseEntity<ResponseHttp> agregarModificarPension(@RequestBody PensionDTO pensionDTO) throws AlojamientoEliminadoException{
         log.info("Se quiere agregar pension a alojamiento: "+pensionDTO.idalojamiento);
         try{
@@ -191,7 +191,7 @@ public class AlojamientoController {
         }
     }
 
-    @DeleteMapping("/pension/{id}")
+    @DeleteMapping("pension/{id}")
     public ResponseEntity<ResponseHttp> agregarModificarPension(@PathVariable long id){
         try{
             alojamientoService.eliminarPension(id);
